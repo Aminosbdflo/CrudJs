@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Stagiaires</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 25px;
+        }
+        
+        .form-container {
+            background: #f8f9fe;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            display: none;
+        }
+        
+        .form-title {
+            font-size: 22px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        
+        .error {
+            color: #e63946;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+        
+        .btn-primary {
+            background: #4361ee;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #3a56d4;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-add {
+            background: #2a9d8f;
+            color: white;
+            padding: 12px 25px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        
+        .btn-add:hover {
+            background: #21867a;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background: #2c3e50;
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fe;
+        }
+        
+        tr:hover {
+            background-color: #e9f7ff;
+        }
+        
+        .btn-action {
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            border: none;
+            margin-right: 5px;
+        }
+        
+        .btn-edit {
+            background: #f4a261;
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background: #e76f51;
+        }
+        
+        .btn-delete {
+            background: #e63946;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #d90429;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+            font-style: italic;
+        }
+        
+        .stats-container {
+            background: #f8f9fe;
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stats-title {
+            font-size: 22px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .stats-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #4361ee;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 16px;
+        }
+        
+        .success-rate {
+            grid-column: span 2;
+            background: #e9f7ef;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            color: #2a9d8f;
+            margin-top: 10px;
+        }
+        
+        @media print {
+            .btn-add, .btn-action {
+                display: none;
+            }
+            
+            .form-container {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Gestion des Stagiaires</h1>
+            <div class="subtitle">Application CRUD avec statistiques</div>
+        </header>
+        
+        <div class="content">
+            <button id="btnAjouter" class="btn btn-add">Ajouter un Stagiaire</button>
+            
+            <div id="form" class="form-container">
+                <h2 class="form-title">Formulaire d'inscription</h2>
+                <form id="stagiaireForm">
+                    <div class="form-group">
+                        <label for="nom">Nom Complet</label>
+                        <input type="text" id="nom" placeholder="Entrez le nom complet">
+                        <div id="nomError" class="error">Veuillez entrer un nom valide</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cc1">Note CC1 (0-20)</label>
+                        <input type="number" id="cc1" min="0" max="20" step="0.5" placeholder="/20">
+                        <div id="cc1Error" class="error">Note doit être entre 0 et 20</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cc2">Note CC2 (0-20)</label>
+                        <input type="number" id="cc2" min="0" max="20" step="0.5" placeholder="/20">
+                        <div id="cc2Error" class="error">Note doit être entre 0 et 20</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cc3">Note CC3 (0-20)</label>
+                        <input type="number" id="cc3" min="0" max="20" step="0.5" placeholder="/20">
+                        <div id="cc3Error" class="error">Note doit être entre 0 et 20</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="efm">Note EFM (0-40)</label>
+                        <input type="number" id="efm" min="0" max="40" step="0.5" placeholder="/40">
+                        <div id="efmError" class="error">Note doit être entre 0 et 40</div>
+                    </div>
+                    
+                    <div>
+                        <button type="button" class="btn btn-primary" onclick="soumettre()">Enregistrer</button>
+                        <button type="button" class="btn btn-secondary" onclick="annuler()">Annuler</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div id="table" class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>CC1</th>
+                            <th>CC2</th>
+                            <th>CC3</th>
+                            <th>EFM</th>
+                            <th>Moyenne</th>
+                            <th>Validation</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stagiairesTableBody">
+                        <tr>
+                            <td colspan="8" class="no-data">Aucun stagiaire enregistré</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="stats-container">
+                <h2 class="stats-title">Statistiques de la Classe</h2>
+                <div class="stats-content">
+                    <div class="stat-item">
+                        <div class="stat-label">Nombre de stagiaires</div>
+                        <div class="stat-value" id="statNbStagiaires">0</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-label">Moyenne de la classe</div>
+                        <div class="stat-value" id="statMoyenneClasse">0.00</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-label">Stagiaires validés</div>
+                        <div class="stat-value" id="statValides">0</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-label">Stagiaires non validés</div>
+                        <div class="stat-value" id="statNonValides">0</div>
+                    </div>
+                    
+                    <div class="success-rate" id="statTauxReussite">Taux de réussite: 0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            chargerStagiaires();
+            
+            // Gestion du bouton Ajouter
+            document.getElementById('btnAjouter').addEventListener('click', ajouter);
+        });
+
+        function sauvegarderStagiaires(stagiaires) {
+            localStorage.setItem('stagiaires', JSON.stringify(stagiaires));
+        }
+
+        function chargerStagiairesDepuisStorage() {
+            const stagiairesJSON = localStorage.getItem('stagiaires');
+            return stagiairesJSON ? JSON.parse(stagiairesJSON) : [];
+        }
+
+        function chargerStagiaires() {
+            const stagiaires = chargerStagiairesDepuisStorage();
+            const tbody = document.getElementById('stagiairesTableBody');
+            tbody.innerHTML = '';
+            
+            if (stagiaires.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="no-data">Aucun stagiaire enregistré</td></tr>';
+                mettreAJourStatistiques();
+                return;
+            }
+            
+            stagiaires.forEach(stagiaire => {
+                ajouterStagiaireAuTableau(stagiaire);
+            });
+            
+            mettreAJourStatistiques();
+        }
+
+        function ajouterStagiaireAuTableau(stagiaire) {
+            const tbody = document.getElementById('stagiairesTableBody');
+            const row = document.createElement('tr');
+            
+            // Supprimer le message "Aucun stagiaire" s'il existe
+            if (tbody.querySelector('.no-data')) {
+                tbody.innerHTML = '';
+            }
+            
+            row.innerHTML = `
+                <td>${stagiaire.nom}</td>
+                <td>${stagiaire.cc1}</td>
+                <td>${stagiaire.cc2}</td>
+                <td>${stagiaire.cc3}</td>
+                <td>${stagiaire.efm}</td>
+                <td>${stagiaire.moyenne}</td>
+                <td>${stagiaire.validation}</td>
+                <td>
+                    <button onclick="modifierStagiaire('${stagiaire.nom}')" class="btn-action btn-edit">Modifier</button>
+                    <button onclick="supprimerStagiaire(this)" class="btn-action btn-delete">Supprimer</button>
+                </td>
+            `;
+            
+            tbody.appendChild(row);
+        }
+
+        function mettreAJourStatistiques() {
+            const stagiaires = chargerStagiairesDepuisStorage();
+            const nombreStagiaires = stagiaires.length;
+            let sommeMoyennes = 0;
+            let valides = 0;
+            
+            stagiaires.forEach(stagiaire => {
+                sommeMoyennes += parseFloat(stagiaire.moyenne);
+                if(stagiaire.validation === "Validé") valides++;
+            });
+            
+            const moyenneClasse = nombreStagiaires > 0 ? (sommeMoyennes / nombreStagiaires).toFixed(2) : 0;
+            const nonValides = nombreStagiaires - valides;
+            const pourcentageReussite = nombreStagiaires > 0 ? ((valides / nombreStagiaires) * 100).toFixed(2) : 0;
+            
+            document.getElementById('statNbStagiaires').textContent = nombreStagiaires;
+            document.getElementById('statMoyenneClasse').textContent = moyenneClasse;
+            document.getElementById('statValides').textContent = valides;
+            document.getElementById('statNonValides').textContent = nonValides;
+            document.getElementById('statTauxReussite').textContent = `Taux de réussite: ${pourcentageReussite}%`;
+        }
+
+        function validerFormulaire() {
+            let isValid = true;
+            
+            // Réinitialiser les erreurs
+            document.querySelectorAll('.error').forEach(el => el.style.display = 'none');
+            
+            // Validation du nom
+            const nom = document.getElementById('nom').value.trim();
+            if (!nom) {
+                document.getElementById('nomError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validation des notes
+            const cc1 = parseFloat(document.getElementById('cc1').value);
+            if (isNaN(cc1) || cc1 < 0 || cc1 > 20) {
+                document.getElementById('cc1Error').style.display = 'block';
+                isValid = false;
+            }
+            
+            const cc2 = parseFloat(document.getElementById('cc2').value);
+            if (isNaN(cc2) || cc2 < 0 || cc2 > 20) {
+                document.getElementById('cc2Error').style.display = 'block';
+                isValid = false;
+            }
+            
+            const cc3 = parseFloat(document.getElementById('cc3').value);
+            if (isNaN(cc3) || cc3 < 0 || cc3 > 20) {
+                document.getElementById('cc3Error').style.display = 'block';
+                isValid = false;
+            }
+            
+            const efm = parseFloat(document.getElementById('efm').value);
+            if (isNaN(efm) || efm < 0 || efm > 40) {
+                document.getElementById('efmError').style.display = 'block';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function soumettre() {
+            if (validerFormulaire()) {
+                const nom = document.getElementById('nom').value.trim();
+                const cc1 = parseFloat(document.getElementById('cc1').value);
+                const cc2 = parseFloat(document.getElementById('cc2').value);
+                const cc3 = parseFloat(document.getElementById('cc3').value);
+                const efm = parseFloat(document.getElementById('efm').value);
+                
+                // Calcul de la moyenne
+                const moyenneControle = (cc1 + cc2 + cc3) / 3;
+                const moyenne = (moyenneControle * 0.6 + efm * 0.4).toFixed(2);
+                const validation = moyenne >= 10 ? "Validé" : "Non validé";
+
+                const stagiaires = chargerStagiairesDepuisStorage();
+                
+                // Vérifier si on est en mode modification
+                const nomModification = document.getElementById('stagiaireForm').dataset.modification;
+                if (nomModification) {
+                    // Trouver l'index du stagiaire à modifier
+                    const index = stagiaires.findIndex(s => s.nom === nomModification);
+                    if (index !== -1) {
+                        // Mettre à jour le stagiaire
+                        stagiaires[index] = {
+                            nom,
+                            cc1,
+                            cc2,
+                            cc3,
+                            efm,
+                            moyenne,
+                            validation
+                        };
+                    }
+                } else {
+                    // Ajouter un nouveau stagiaire
+                    stagiaires.push({
+                        nom,
+                        cc1,
+                        cc2,
+                        cc3,
+                        efm,
+                        moyenne,
+                        validation
+                    });
+                }
+
+                sauvegarderStagiaires(stagiaires);
+                chargerStagiaires();
+                annuler();
+            }
+        }
+
+        function annuler() {
+            document.getElementById("form").style.display = 'none';
+            document.getElementById("table").style.display = 'block';
+            document.getElementById('stagiaireForm').reset();
+            delete document.getElementById('stagiaireForm').dataset.modification;
+        }
+
+        function ajouter() {
+            document.getElementById("form").style.display = 'block';
+            document.getElementById("table").style.display = 'none';
+            document.getElementById('stagiaireForm').reset();
+            delete document.getElementById('stagiaireForm').dataset.modification;
+            document.getElementById('nom').focus();
+        }
+
+        function supprimerStagiaire(button) {
+            const row = button.parentNode.parentNode;
+            const nom = row.cells[0].textContent;
+            
+            if (confirm(`Voulez-vous vraiment supprimer ${nom} ?`)) {
+                let stagiaires = chargerStagiairesDepuisStorage();
+                stagiaires = stagiaires.filter(s => s.nom !== nom);
+                sauvegarderStagiaires(stagiaires);
+                chargerStagiaires();
+            }
+        }
+        
+        function modifierStagiaire(nom) {
+            const stagiaires = chargerStagiairesDepuisStorage();
+            const stagiaire = stagiaires.find(s => s.nom === nom);
+            
+            if (stagiaire) {
+                document.getElementById('nom').value = stagiaire.nom;
+                document.getElementById('cc1').value = stagiaire.cc1;
+                document.getElementById('cc2').value = stagiaire.cc2;
+                document.getElementById('cc3').value = stagiaire.cc3;
+                document.getElementById('efm').value = stagiaire.efm;
+                
+                // Marquer le formulaire en mode modification
+                document.getElementById('stagiaireForm').dataset.modification = stagiaire.nom;
+                
+                // Afficher le formulaire
+                document.getElementById("form").style.display = 'block';
+                document.getElementById("table").style.display = 'none';
+            }
+        }
+
+        function imprimerPage() {
+            window.print();
+        }
+    </script>
+</body>
+</html>
