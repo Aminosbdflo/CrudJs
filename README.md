@@ -8,31 +8,6 @@
   <img src="https://media.giphy.com/media/dWesBcTLavkZuG35MI/giphy.gif" width="400" height="200"/>
 </div>
 
-## 🚀 About Me
-
-```javascript
-const amine = {
-    pronouns: "He/Him",
-    code: ["JavaScript", "HTML", "CSS", "Python", "PHP"],
-    askMeAbout: ["web dev", "learning journey", "student projects"],
-    technologies: {
-        frontEnd: {
-            markup: ["HTML5"],
-            styling: ["CSS3", "Tailwind CSS", "Bootstrap"],
-            js: ["JavaScript", "React (learning)"]
-        },
-        backEnd: {
-            languages: ["Python", "PHP", "Node.js (basics)"]
-        },
-        databases: ["MySQL", "SQL"],
-        tools: ["Git", "VS Code", "GitHub", "Figma (basics)"]
-    },
-    currentFocus: "Second year Full Stack Development student 🎓",
-    education: "Currently studying Full Stack Development",
-    funFact: "Every error is a new lesson, and I love learning! 📚"
-};
-```
-
 ## 🛠️ Tech Stack
 
 <div align="center">
